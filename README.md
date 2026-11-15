@@ -1,76 +1,74 @@
 # 🎧 Spotify Player
 
-Маленький быстрый плеер для **macOS** и **Windows**: жмёшь **Shift+Пробел**, пишешь исполнителя или песню, жмёшь Enter, и Spotify начинает играть.
+A tiny, fast Spotify launcher for **macOS** and **Windows**. Press **Shift+Space** from anywhere, type an artist or a song, hit Enter, and it plays.
 
-*A tiny launcher-style Spotify controller for macOS and Windows: press Shift+Space, type an artist or a song, hit Enter.*
+## Features
 
-## Возможности
-
-- ⚡ **Shift+Пробел** из любого приложения открывает окно поиска.
-- 🧠 **Умный поиск.** «Nirvana» или «Нирвана» включит исполнителя, «smells like teen spirit» включит песню, «nirvana come as you are» включит нужный трек. Русские имена тоже понимает: «Скриптонит» найдёт Skryptonite.
-- 🎵 **«Сейчас играет»**: обложка, плавный прогресс, перемотка кликом.
-- ⏮ ⏯ ⏭ и ❤️ **лайк** прямо из окна, плюс горячие клавиши.
-- 🌈 **Живой фон** из размытой обложки текущего трека и плавные анимации.
-- 🚀 Если Spotify закрыт, плеер откроет его сам.
+- ⚡ **Shift+Space** opens the search window from any app.
+- 🧠 **Smart search.** "Nirvana" plays the artist, "smells like teen spirit" plays the song, "nirvana come as you are" plays that exact track. Cyrillic spellings work too: "Скриптонит" finds Skryptonite.
+- 🎵 **Now playing**: album art, smooth progress bar, click to seek.
+- ⏮ ⏯ ⏭ and ❤️ **like** right from the window, with keyboard shortcuts.
+- 🌈 **Living background** made from the blurred album art, plus smooth animations.
+- 🚀 If Spotify is closed, the player opens it for you.
 
 | | macOS | Windows |
 |---|---|---|
-| Открыть / спрятать | ⇧ Space | Shift+Space |
-| Пауза | ⌘P | Ctrl+P |
-| Пред. / след. трек | ⌘← / ⌘→ | Ctrl+← / Ctrl+→ |
-| Лайк | ⌘L | Ctrl+L |
-| Закрыть | Esc | Esc |
+| Show / hide | ⇧ Space | Shift+Space |
+| Play / pause | ⌘P | Ctrl+P |
+| Previous / next | ⌘← / ⌘→ | Ctrl+← / Ctrl+→ |
+| Like | ⌘L | Ctrl+L |
+| Close | Esc | Esc |
 
-> Для управления воспроизведением через Spotify API нужен **Spotify Premium**.
+> Controlling playback through the Spotify Web API requires **Spotify Premium**.
 
-## Установка
+## Install
 
-Скачай готовую сборку со страницы **[Releases](../../releases/latest)**:
+Download a ready-made build from **[Releases](../../releases/latest)**:
 
-- **macOS** (Apple Silicon, macOS 26+): `SpotifyPlayer-macOS.zip`. Распакуй и перетащи в «Программы».
-  При первом запуске macOS скажет, что разработчик не проверен: кликни по приложению **правой кнопкой → «Открыть» → «Открыть»**.
-  Или в Терминале: `xattr -cr "/Applications/spotifydj.app"`.
-- **Windows 10/11**: `SpotifyPlayer-Windows.zip`. Распакуй и запусти `SpotifyPlayer.exe`.
-  Если появится «Windows защитила ваш компьютер», нажми **«Подробнее» → «Выполнить в любом случае»**.
+- **macOS** (Apple Silicon, macOS 26+): `SpotifyPlayer-macOS.zip`. Unzip it and drag the app to Applications.
+  The app isn't notarized, so on first launch **right-click it → Open → Open**,
+  or run `xattr -cr "/Applications/spotifydj.app"` in Terminal.
+- **Windows 10/11**: `SpotifyPlayer-Windows.zip`. Unzip it and run `SpotifyPlayer.exe`.
+  If you see "Windows protected your PC", click **More info → Run anyway**.
 
-### Первый запуск: ключи Spotify
+### First launch: Spotify keys
 
-Плеер работает через твоё собственное приложение Spotify для разработчиков (это бесплатно, займёт пару минут):
+The player talks to Spotify through your own (free) Spotify developer app. It takes a couple of minutes:
 
-1. Открой https://developer.spotify.com/dashboard и нажми **Create app**.
-2. Название любое. В **Redirect URI** впиши `http://127.0.0.1:8888/callback`, отметь **Web API**.
-3. Запусти плеер: в браузере откроется страница настройки. Вставь туда **Client ID** и **Client Secret** и войди в Spotify.
+1. Open https://developer.spotify.com/dashboard and click **Create app**.
+2. Any name works. Set the **Redirect URI** to `http://127.0.0.1:8888/callback` and tick **Web API**.
+3. Launch the player. A setup page opens in your browser: paste your **Client ID** and **Client Secret**, then log in to Spotify.
 
-Ключи и вход хранятся только на твоём компьютере и никуда не отправляются, кроме самого Spotify.
+Your keys and login stay on your computer and are only ever sent to Spotify.
 
-## Как это устроено
+## How it works
 
 ```
 ┌──────────────┐   HTTP 127.0.0.1:8888   ┌──────────────┐   Web API   ┌─────────┐
-│ окно плеера  │ ──────────────────────▶ │  server.py   │ ──────────▶ │ Spotify │
+│ player window│ ──────────────────────▶ │  server.py   │ ──────────▶ │ Spotify │
 │ Swift / HTML │ ◀────────────────────── │ (Flask)      │ ◀────────── │         │
 └──────────────┘                         └──────────────┘             └─────────┘
 ```
 
-- `server/`: общий локальный сервер на Python (поиск, воспроизведение, лайки, вход через OAuth).
-- `macos/`: приложение на SwiftUI для меню-бара; сервер собирается PyInstaller-ом и кладётся внутрь `.app`.
-- `windows/`: окно на pywebview (HTML/CSS), значок в трее, глобальная горячая клавиша.
+- `server/`: the shared local Python server (search, playback, likes, OAuth login).
+- `macos/`: a SwiftUI menu bar app; the server is built with PyInstaller and bundled inside the `.app`.
+- `windows/`: a pywebview window (HTML/CSS), a tray icon and a global hotkey.
 
-## Сборка из исходников
+## Build from source
 
 **macOS** (Xcode 27+, Python 3.11+):
 ```bash
 open macos/spotifydj.xcodeproj
 ```
-Нажми Run. При первой сборке Xcode сам соберёт сервер (`server/build_mac.sh`).
+Press Run. On the first build Xcode builds the server automatically (`server/build_mac.sh`).
 
-**Windows** (Python 3.11+): запусти `windows\build.bat`. Готовый `.exe` появится в `windows\dist\SpotifyPlayer`.
-Подробности в [windows/README.md](windows/README.md).
+**Windows** (Python 3.11+): run `windows\build.bat`. The `.exe` ends up in `windows\dist\SpotifyPlayer`.
+See [windows/README.md](windows/README.md) for details.
 
-Windows-сборку для релизов делает GitHub Actions ([windows-release.yml](.github/workflows/windows-release.yml)): при публикации релиза `SpotifyPlayer-Windows.zip` прикрепляется к нему автоматически.
+Release builds for Windows are made by GitHub Actions ([windows-release.yml](.github/workflows/windows-release.yml)): when a release is published, `SpotifyPlayer-Windows.zip` is attached to it automatically.
 
-## Автор
+## Author
 
-Сделал [@tenssage](https://t.me/tenssage). Проект не связан со Spotify AB, «Spotify» является товарным знаком Spotify AB.
+Made by [@tenssage](https://t.me/tenssage). Not affiliated with Spotify AB. "Spotify" is a trademark of Spotify AB.
 
-Лицензия: [MIT](LICENSE).
+License: [MIT](LICENSE).

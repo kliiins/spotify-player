@@ -537,7 +537,7 @@ struct MyApp: App {
 
         MenuBarExtra {
 
-            Button("Открыть Spotify Player") {
+            Button("Open Spotify Player") {
 
                 appController.showWindow(
                     animated: true
@@ -545,7 +545,7 @@ struct MyApp: App {
             }
             .keyboardShortcut(" ", modifiers: .shift)
 
-            Button("Войти в Spotify заново…") {
+            Button("Log in to Spotify…") {
 
                 if let url = URL(string: "http://127.0.0.1:8888/login") {
                     NSWorkspace.shared.open(url)
@@ -554,7 +554,7 @@ struct MyApp: App {
 
             Divider()
 
-            Button("Выйти") {
+            Button("Quit") {
 
                 NSApp.terminate(nil)
             }

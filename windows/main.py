@@ -1,9 +1,9 @@
-"""Spotify Player для Windows.
+"""Spotify Player for Windows.
 
-Что делает:
-  • запускает локальный сервер (server.py) в фоне;
-  • показывает окно плеера по Shift+Пробел (и по клику на значок в трее);
-  • значок в трее: открыть, войти в Spotify, автозапуск с Windows, выход.
+What it does:
+  • starts the local server (server/server.py) in the background;
+  • shows the player window on Shift+Space (or when the tray icon is clicked);
+  • tray icon: open, log in to Spotify, start with Windows, quit.
 """
 
 import ctypes
@@ -213,7 +213,7 @@ def setup_tray():
     try:
         import pystray
     except ImportError:
-        print("TRAY: pystray не установлен")
+        print("TRAY: pystray is not installed")
         return None
 
     def open_window(_icon=None, _item=None):
@@ -227,11 +227,11 @@ def setup_tray():
         os._exit(0)
 
     menu = pystray.Menu(
-        pystray.MenuItem("Открыть  (Shift+Пробел)", open_window, default=True),
-        pystray.MenuItem("Войти в Spotify…", login),
-        pystray.MenuItem("Запускать вместе с Windows", toggle_autostart, checked=autostart_enabled),
+        pystray.MenuItem("Open  (Shift+Space)", open_window, default=True),
+        pystray.MenuItem("Log in to Spotify…", login),
+        pystray.MenuItem("Start with Windows", toggle_autostart, checked=autostart_enabled),
         pystray.Menu.SEPARATOR,
-        pystray.MenuItem("Выйти", quit_app),
+        pystray.MenuItem("Quit", quit_app),
     )
     icon = pystray.Icon("spotify_player", make_icon_image(), APP_NAME, menu)
     icon.run_detached()
@@ -251,7 +251,7 @@ def server_running():
 
 def start_server():
     if server_running():
-        print("SERVER: уже запущен")
+        print("SERVER: already running")
         return
     threading.Thread(target=server.run_server, daemon=True).start()
     for _ in range(50):
@@ -267,9 +267,9 @@ def on_ready():
 
     status = requests.get(f"{URL}/native-status", timeout=3).json()
     if not status.get("configured"):
-        webbrowser.open(f"{URL}/setup")       # первый запуск: ввести ключи Spotify
+        webbrowser.open(f"{URL}/setup")       # first run: enter Spotify keys
     elif not status.get("logged_in"):
-        webbrowser.open(f"{URL}/login")       # ключи есть, но вход не выполнен
+        webbrowser.open(f"{URL}/login")       # keys exist, but not logged in yet
 
     controller.show()
 

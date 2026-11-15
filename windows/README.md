@@ -1,61 +1,60 @@
-# Spotify Player для Windows
+# Spotify Player for Windows
 
-Мини-плеер: жмёшь **Shift+Пробел**, пишешь исполнителя или песню, жмёшь Enter, и Spotify начинает играть.
-Это Windows-версия того же приложения, что и на Mac: тот же дизайн, умный поиск, «сейчас играет»,
-⏮ ⏯ ⏭, перемотка и ❤️ лайк.
+A mini player: press **Shift+Space**, type an artist or a song, hit Enter, and Spotify plays it.
+Same app as on macOS: same design, smart search, now playing, ⏮ ⏯ ⏭, seeking and ❤️ likes.
 
-> Проще всего скачать готовый `SpotifyPlayer-Windows.zip` со страницы **Releases** репозитория.
-> Ниже описано, как собрать самому.
+> The easiest way is to download the ready-made `SpotifyPlayer-Windows.zip` from the repository's **Releases** page.
+> The steps below are for building it yourself.
 
-## Сборка (один раз)
+## Build (once)
 
-1. Установи **Python 3.11 или новее**: https://www.python.org/downloads/
-   При установке **обязательно поставь галочку «Add Python to PATH»**.
-2. Скачай репозиторий (Code → Download ZIP) и распакуй его, например в `C:\Apps\spotify-player`.
-3. Открой папку `windows` и дважды кликни **`build.bat`**. Первый раз сборка займёт 2–4 минуты.
-4. Когда появится «Готово!», откроется папка `dist\SpotifyPlayer`. В ней лежит **`SpotifyPlayer.exe`**.
-   Эту папку можно перенести куда угодно, например в `C:\Program Files`.
+1. Install **Python 3.11 or newer**: https://www.python.org/downloads/
+   During installation **make sure to tick "Add Python to PATH"**.
+2. Download the repository (Code → Download ZIP) and unzip it, for example to `C:\Apps\spotify-player`.
+3. Open the `windows` folder and double-click **`build.bat`**. The first build takes 2–4 minutes.
+4. When you see "Done!", the `dist\SpotifyPlayer` folder opens. It contains **`SpotifyPlayer.exe`**.
+   You can move this folder anywhere, for example to `C:\Program Files`.
 
-> Если Windows покажет «Windows защитила ваш компьютер», нажми **«Подробнее» → «Выполнить в любом случае»**.
-> Так бывает с любой программой без платной цифровой подписи.
+> If Windows says "Windows protected your PC", click **More info → Run anyway**.
+> This happens with any app that doesn't have a paid code-signing certificate.
 
-## Первый запуск
+## First launch
 
-1. Запусти `SpotifyPlayer.exe`. В трее у часов появится зелёный значок с волной.
-2. В браузере откроется страница **настройки**. Туда нужно вставить ключи Spotify:
-   - открой https://developer.spotify.com/dashboard;
-   - выбери **то же приложение, что на Mac** (или создай новое);
-   - в настройках приложения проверь, что в **Redirect URIs** есть `http://127.0.0.1:8888/callback`;
-   - скопируй **Client ID** и **Client Secret** на страницу настройки и нажми «Сохранить и войти».
-3. Войди в Spotify и разреши доступ. Всё, можно пользоваться.
+1. Run `SpotifyPlayer.exe`. A green waveform icon appears in the tray next to the clock.
+2. A **setup** page opens in your browser. Paste your Spotify keys there:
+   - open https://developer.spotify.com/dashboard;
+   - pick your app (or create a new one);
+   - make sure **Redirect URIs** contains `http://127.0.0.1:8888/callback`;
+   - copy the **Client ID** and **Client Secret** to the setup page and click "Save and log in".
+3. Log in to Spotify and allow access. That's it.
 
-Ключи и вход хранятся только на этом компьютере, в `%APPDATA%\SpotifyPlayer`.
+Keys and login are stored only on this computer, in `%APPDATA%\SpotifyPlayer`.
 
-## Управление
+## Controls
 
-| Что | Как |
+| Action | How |
 |---|---|
-| Открыть / спрятать | **Shift+Пробел** или клик по значку в трее |
-| Включить | написать и нажать **Enter** |
-| Пауза / продолжить | **Ctrl+P** |
-| Предыдущий / следующий | **Ctrl+←** / **Ctrl+→** |
-| Лайк | **Ctrl+L** или ♥ |
-| Перемотка | клик по полоске прогресса |
-| Закрыть окно | **Esc** |
+| Show / hide | **Shift+Space** or click the tray icon |
+| Play | type and press **Enter** |
+| Play / pause | **Ctrl+P** |
+| Previous / next | **Ctrl+←** / **Ctrl+→** |
+| Like | **Ctrl+L** or ♥ |
+| Seek | click the progress bar |
+| Close the window | **Esc** |
 
-Пункты меню значка в трее: «Войти в Spotify…», **«Запускать вместе с Windows»** (галочка) и «Выйти».
+The tray icon menu has "Log in to Spotify…", **"Start with Windows"** (checkbox) and "Quit".
 
-## Если что-то не работает
+## Troubleshooting
 
-- **«Spotify не видит устройств»**: открой приложение Spotify на этом компьютере. Обычно плеер открывает его сам.
-- **«Нужен Premium»**: управлять воспроизведением через Spotify API можно только с Premium.
-- **Shift+Пробел не срабатывает**: проверь, что программа запущена (значок в трее). Некоторые игры в полноэкранном режиме перехватывают клавиши.
-- **Нужно сменить аккаунт или ключи**: удали папку `%APPDATA%\SpotifyPlayer` и запусти программу заново.
-- **Ошибка при сборке**: скопируй текст из окна `build.bat` и пришли его Claude.
+- **"Spotify sees no devices"**: open the Spotify app on this computer. Usually the player opens it for you.
+- **"Premium required"**: controlling playback through the Spotify API only works with Premium.
+- **Shift+Space does nothing**: make sure the app is running (tray icon). Some full-screen games capture the keyboard.
+- **Switch account or keys**: delete the `%APPDATA%\SpotifyPlayer` folder and start the app again.
+- **Build error**: copy the text from the `build.bat` window and open an issue.
 
-## Файлы
+## Files
 
-- `main.py`: окно, значок в трее, Shift+Пробел, автозапуск
-- `../server/server.py`: работа со Spotify (поиск, воспроизведение, лайки), общий с macOS
-- `ui/index.html`: интерфейс окна
-- `build.bat`: сборка `.exe`; `run_dev.bat`: запуск без сборки (для отладки)
+- `main.py`: window, tray icon, Shift+Space, autostart
+- `../server/server.py`: Spotify logic (search, playback, likes), shared with macOS
+- `ui/index.html`: the window UI
+- `build.bat`: builds the `.exe`; `run_dev.bat`: runs from source (for debugging)

@@ -1,10 +1,12 @@
-"""Spotify Player — локальный сервер мини-плеера (общий для macOS и Windows).
+"""Spotify Player — local server for the mini player (shared by macOS and Windows).
 
-Эндпоинты для нативного приложения:
-    POST /native-play     {"prompt": "..."}         — найти и включить трек
-    GET  /native-state                              — что сейчас играет
-    POST /native-control  {"action": "...", ...}    — play/pause/toggle/next/previous/seek
-    GET  /health                                    — сервер жив (для приложения)
+Endpoints used by the native apps:
+    POST /native-play     {"prompt": "..."}          — find and play a track or artist
+    GET  /native-state                               — what's playing now
+    POST /native-control  {"action": "...", ...}     — play/pause/toggle/next/previous/seek
+    POST /native-like     {"id": "...", "liked": b}  — add/remove from Liked Songs
+    GET  /native-status                              — keys configured? logged in?
+    GET  /health                                     — server is alive
 """
 
 import json
@@ -77,7 +79,7 @@ HTTP_TIMEOUT = 10          # секунд на любой запрос к Spotif
 TOKEN_MARGIN = 60          # обновляем токен за минуту до истечения
 DEVICE_WAIT_SECONDS = 8    # сколько ждать, пока запущенный Spotify появится как устройство
 
-NOT_LOGGED_IN = "Сначала войди в Spotify: в меню значка выбери «Войти в Spotify»."
+NOT_LOGGED_IN = "Log in to Spotify first: choose “Log in to Spotify…” in the app menu."
 
 app = Flask(__name__)
 app.secret_key = os.getenv("FLASK_SECRET_KEY") or secrets.token_hex(32)
@@ -190,12 +192,12 @@ def spotify_error_text(response):
         message = None
 
     if response.status_code == 404:
-        return "Нет активного устройства Spotify. Открой Spotify и попробуй ещё раз."
+        return "No active Spotify device. Open Spotify and try again."
     if response.status_code == 403:
-        return "Spotify не разрешил это действие (нужен Premium или устройство ограничено)."
+        return "Spotify refused this action (Premium required or the device is restricted)."
     if response.status_code == 429:
-        return "Слишком много запросов к Spotify, подожди пару секунд."
-    return message or f"Ошибка Spotify ({response.status_code})"
+        return "Too many requests to Spotify, wait a couple of seconds."
+    return message or f"Spotify error ({response.status_code})"
 
 
 def spotify_api(method, endpoint, **kwargs):
@@ -213,13 +215,13 @@ def spotify_api(method, endpoint, **kwargs):
             )
         except requests.RequestException as error:
             print("SPOTIFY NETWORK ERROR:", error)
-            raise SpotifyError("Нет связи со Spotify. Проверь интернет.", 503)
+            raise SpotifyError("Can’t reach Spotify. Check your internet connection.", 503)
 
     response = send(token)
     if response.status_code == 401:
         new_token = refresh_access_token()
         if not new_token:
-            raise SpotifyError("Сессия Spotify истекла. " + NOT_LOGGED_IN, 401)
+            raise SpotifyError("Spotify session expired. " + NOT_LOGGED_IN, 401)
         response = send(new_token)
     return response
 
@@ -266,11 +268,11 @@ def pick_device():
             devices = list_devices()
 
     if not devices:
-        raise SpotifyError("Spotify не видит устройств. Открой приложение Spotify.", 404)
+        raise SpotifyError("Spotify sees no devices. Open the Spotify app.", 404)
 
     usable = [d for d in devices if not d.get("is_restricted")]
     if not usable:
-        raise SpotifyError("Устройство Spotify ограничено и не принимает команды.", 403)
+        raise SpotifyError("This Spotify device is restricted and doesn’t accept commands.", 403)
 
     return next((d for d in usable if d.get("is_active")), usable[0])
 
@@ -337,7 +339,7 @@ def search_best(query):
     tracks = data.get("tracks", {}).get("items", [])
 
     if not artists and not tracks:
-        raise SpotifyError(f"Ничего не найдено по запросу «{query}».", 404)
+        raise SpotifyError(f"Nothing found for “{query}”.", 404)
 
     # Spotify больше не отдаёт popularity для таких приложений, поэтому опираемся
     # на порядок результатов: он уже учитывает популярность.
@@ -412,7 +414,7 @@ def play_artist(artist):
         "success": True,
         "kind": "artist",
         "name": artist.get("name", ""),
-        "artist": "Популярное у исполнителя",
+        "artist": "Artist · top tracks",
         "image_url": images[0]["url"] if images else "",
         "duration_ms": 0,
     }
@@ -471,8 +473,8 @@ def get_playback_state():
 
 _liked_cache = {}   # track_id -> bool, чтобы не спрашивать Spotify каждые 1.5 с
 
-NEED_RELOGIN = ("Для лайков нужно новое разрешение: открой http://127.0.0.1:8888/login "
-                "в браузере и войди ещё раз.")
+NEED_RELOGIN = ("Likes need a new permission: open http://127.0.0.1:8888/login "
+                "in your browser and log in again.")
 
 
 def _library_request(method, track_id):
@@ -508,7 +510,7 @@ def set_liked(track_id=None, liked=None):
         state = get_playback_state()
         track_id = (state.get("track") or {}).get("id")
     if not track_id:
-        raise SpotifyError("Сейчас ничего не играет.", 404)
+        raise SpotifyError("Nothing is playing right now.", 404)
 
     if liked is None:
         liked = not is_liked(track_id)
@@ -537,11 +539,11 @@ def player_action(action, position_ms=None):
         try:
             position = max(0, int(position_ms))
         except (TypeError, ValueError):
-            raise SpotifyError("Неверная позиция")
+            raise SpotifyError("Invalid position")
         commands["seek"] = ("PUT", "/me/player/seek", {"position_ms": position})
 
     if action not in commands:
-        raise SpotifyError("Неизвестная команда")
+        raise SpotifyError("Unknown command")
 
     method, endpoint, params = commands[action]
     spotify_ok(spotify_api(method, endpoint, params=params))
@@ -569,7 +571,7 @@ def native_play():
     data = request.get_json(silent=True) or {}
     query = (data.get("prompt") or "").strip()
     if not query:
-        return {"success": False, "error": "Пустой запрос."}, 400
+        return {"success": False, "error": "Empty query."}, 400
     return json_result(play_query, query)
 
 
@@ -630,8 +632,8 @@ def index():
         return page("""
             <div style="font-size:55px">🎧</div>
             <h1>Spotify Player</h1>
-            <p class="muted">Войди один раз — дальше приложение работает само.</p>
-            <a class="btn" href="/login">Войти через Spotify</a>
+            <p class="muted">Log in once — after that the app works on its own.</p>
+            <a class="btn" href="/login">Log in with Spotify</a>
         """)
 
     try:
@@ -640,18 +642,18 @@ def index():
         return page(f"""
             <h1>Spotify Player</h1>
             <p class="error">{escape(error.message)}</p>
-            <a class="btn" href="/login">Войти заново</a>
+            <a class="btn" href="/login">Log in again</a>
         """)
 
-    name = escape(profile.get("display_name") or "друг")
+    name = escape(profile.get("display_name") or "friend")
     return page(f"""
         <h1>Spotify Player</h1>
-        <p>Привет, {name} 👋</p>
+        <p>Hi, {name} 👋</p>
         <form action="/ai-play" method="post">
-            <input name="prompt" placeholder="Что включить?" autofocus required>
-            <button>Включить</button>
+            <input name="prompt" placeholder="What should I play?" autofocus required>
+            <button>Play</button>
         </form>
-        <p class="muted">В приложении: ⇧ Space · <a href="/logout">выйти</a></p>
+        <p class="muted">In the app: ⇧ Space · <a href="/logout">log out</a></p>
     """)
 
 
@@ -679,11 +681,11 @@ def callback():
     expected_state = session.pop("oauth_state", None)
 
     if not code:
-        return page(f"<h1>Вход отменён</h1><p>{escape(request.args.get('error', ''))}</p>"
-                    "<a href='/'>Назад</a>"), 400
+        return page(f"<h1>Login cancelled</h1><p>{escape(request.args.get('error', ''))}</p>"
+                    "<a href='/'>Back</a>"), 400
     if expected_state and state != expected_state:
-        return page("<h1>Ошибка входа</h1><p>Неверный state, попробуй ещё раз.</p>"
-                    "<a href='/login'>Войти</a>"), 400
+        return page("<h1>Login error</h1><p>Invalid state, please try again.</p>"
+                    "<a href='/login'>Log in</a>"), 400
 
     try:
         response = requests.post(
@@ -699,10 +701,10 @@ def callback():
         )
         data = response.json()
     except (requests.RequestException, ValueError) as error:
-        return page(f"<h1>Ошибка входа</h1><p>{escape(str(error))}</p>"), 502
+        return page(f"<h1>Login error</h1><p>{escape(str(error))}</p>"), 502
 
     if "access_token" not in data:
-        return page(f"<h1>Ошибка Spotify</h1><p>{escape(str(data))}</p>"), 400
+        return page(f"<h1>Spotify error</h1><p>{escape(str(data))}</p>"), 400
 
     save_token(data)
     print("SPOTIFY LOGIN SUCCESS")
@@ -718,14 +720,14 @@ def ai_play():
         result = play_query(query)
     except SpotifyError as error:
         return page(f"""
-            <h1>Не удалось включить</h1>
+            <h1>Couldn’t play that</h1>
             <p class="error">{escape(error.message)}</p>
-            <a href="/">Назад</a>
+            <a href="/">Back</a>
         """), error.status
     return page(f"""
         <h1>▶ {escape(result['name'])}</h1>
         <p class="muted">{escape(result['artist'])}</p>
-        <a href="/">Ещё</a>
+        <a href="/">More</a>
     """)
 
 
@@ -781,7 +783,7 @@ def setup():
         client_id = request.form.get("client_id", "").strip()
         client_secret = request.form.get("client_secret", "").strip()
         if len(client_id) < 16 or len(client_secret) < 16:
-            error = "Похоже, ключи вставлены не полностью."
+            error = "Looks like the keys weren’t pasted completely."
         else:
             with open(ENV_FILE, "w", encoding="utf-8") as file:
                 file.write(f"SPOTIFY_CLIENT_ID={client_id}\n")
@@ -793,19 +795,19 @@ def setup():
 
     return page(f"""
         <div style="font-size:48px">🎧</div>
-        <h1>Настройка Spotify Player</h1>
+        <h1>Spotify Player setup</h1>
         <p class="muted" style="max-width:460px;margin:0 auto 18px">
-            Открой <a href="https://developer.spotify.com/dashboard" target="_blank">developer.spotify.com/dashboard</a>,
-            выбери своё приложение (или создай новое с Redirect URI
-            <code>http://127.0.0.1:8888/callback</code>) и скопируй ключи сюда.
+            Open <a href="https://developer.spotify.com/dashboard" target="_blank">developer.spotify.com/dashboard</a>,
+            pick your app (or create one with the Redirect URI
+            <code>http://127.0.0.1:8888/callback</code>) and paste its keys here.
         </p>
         <form method="post" style="display:flex;flex-direction:column;gap:10px;align-items:center">
             <input name="client_id" placeholder="Client ID" required autocomplete="off">
             <input name="client_secret" placeholder="Client Secret" required autocomplete="off" type="password">
-            <button style="margin:6px 0 0">Сохранить и войти</button>
+            <button style="margin:6px 0 0">Save and log in</button>
         </form>
         <p class="error">{escape(error)}</p>
-        <p class="muted">Ключи хранятся только у тебя: <code>{escape(ENV_FILE)}</code></p>
+        <p class="muted">Keys are stored only on this computer: <code>{escape(ENV_FILE)}</code></p>
     """)
 
 

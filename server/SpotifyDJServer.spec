@@ -1,5 +1,5 @@
 # -*- mode: python ; coding: utf-8 -*-
-# PyInstaller-сборка сервера для macOS-приложения (кладётся внутрь .app)
+# PyInstaller build of the server for the macOS app (bundled inside the .app)
 
 a = Analysis(['server.py'], pathex=[], binaries=[], datas=[], hiddenimports=[],
              hookspath=[], hooksconfig={}, runtime_hooks=[], excludes=[], noarchive=False, optimize=0)
