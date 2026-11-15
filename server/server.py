@@ -20,6 +20,15 @@ from dotenv import load_dotenv
 from flask import Flask, redirect, render_template_string, request, send_from_directory, session
 from markupsafe import escape
 
+# Консоль Windows по умолчанию не умеет печатать кириллицу и эмодзи из названий треков —
+# без этого print() может уронить программу. В окне без консоли stdout = None.
+for _stream in (sys.stdout, sys.stderr):
+    try:
+        if _stream is not None:
+            _stream.reconfigure(encoding="utf-8", errors="replace")
+    except (AttributeError, ValueError):
+        pass
+
 # ==========================================
 # CONFIG
 # ==========================================
