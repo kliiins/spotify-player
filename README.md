@@ -2,6 +2,15 @@
 
 A tiny, fast Spotify launcher for **macOS** and **Windows**. Press **Shift+Space** from anywhere, type an artist or a song, hit Enter, and it plays.
 
+<p align="center">
+  <img src="docs/screenshots/now-playing.png" alt="Now playing" width="720">
+</p>
+
+<p align="center">
+  <img src="docs/screenshots/search.png" alt="Searching" width="49%">
+  <img src="docs/screenshots/liked.png" alt="Liked track" width="49%">
+</p>
+
 ## Features
 
 - ⚡ **Shift+Space** opens the search window from any app.
