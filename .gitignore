@@ -1,0 +1,24 @@
+# секреты — никогда не коммитить
+.env
+*.env
+spotify_token.json
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+build/
+dist/
+
+# Windows-сборка
+windows/icon.ico
+windows/*.spec
+*.zip
+
+# Xcode
+xcuserdata/
+*.xcuserstate
+DerivedData/
+
+# macOS
+.DS_Store

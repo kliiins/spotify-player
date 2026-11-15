@@ -1,0 +1,653 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 90;
+	objects = {
+
+/* Begin PBXCopyFilesBuildPhase section */
+		D58B09543062E956006E3711 /* Copy Files */ = {
+			isa = PBXCopyFilesBuildPhase;
+			dstPath = "";
+			dstSubfolder = Resources;
+			files = (
+			);
+			name = "Copy Files";
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		000000000000000000000120 /* spotifydj.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = spotifydj.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		D5CB7E93306324FE0036DA22 /* cacert.pem */ = {isa = PBXFileReference; lastKnownFileType = text; path = cacert.pem; sourceTree = "<group>"; };
+		D5CB7E94306324FE0036DA22 /* py.typed */ = {isa = PBXFileReference; lastKnownFileType = text; path = py.typed; sourceTree = "<group>"; };
+		D5CB7E96306324FE0036DA22 /* cd.cpython-314-darwin.so */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.bundle"; path = "cd.cpython-314-darwin.so"; sourceTree = "<group>"; };
+		D5CB7E97306324FE0036DA22 /* md.cpython-314-darwin.so */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.bundle"; path = "md.cpython-314-darwin.so"; sourceTree = "<group>"; };
+		D5CB7E99306324FE0036DA22 /* LICENSE.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE.txt; sourceTree = "<group>"; };
+		D5CB7E9B306324FE0036DA22 /* INSTALLER */ = {isa = PBXFileReference; lastKnownFileType = text; path = INSTALLER; sourceTree = "<group>"; };
+		D5CB7E9C306324FE0036DA22 /* METADATA */ = {isa = PBXFileReference; lastKnownFileType = text; path = METADATA; sourceTree = "<group>"; };
+		D5CB7E9D306324FE0036DA22 /* RECORD */ = {isa = PBXFileReference; lastKnownFileType = text; path = RECORD; sourceTree = "<group>"; };
+		D5CB7E9E306324FE0036DA22 /* WHEEL */ = {isa = PBXFileReference; lastKnownFileType = text; path = WHEEL; sourceTree = "<group>"; };
+		D5CB7EA0306324FE0036DA22 /* LICENSE.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE.txt; sourceTree = "<group>"; };
+		D5CB7EA2306324FE0036DA22 /* entry_points.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = entry_points.txt; sourceTree = "<group>"; };
+		D5CB7EA3306324FE0036DA22 /* INSTALLER */ = {isa = PBXFileReference; lastKnownFileType = text; path = INSTALLER; sourceTree = "<group>"; };
+		D5CB7EA4306324FE0036DA22 /* METADATA */ = {isa = PBXFileReference; lastKnownFileType = text; path = METADATA; sourceTree = "<group>"; };
+		D5CB7EA5306324FE0036DA22 /* RECORD */ = {isa = PBXFileReference; lastKnownFileType = text; path = RECORD; sourceTree = "<group>"; };
+		D5CB7EA6306324FE0036DA22 /* REQUESTED */ = {isa = PBXFileReference; lastKnownFileType = text; path = REQUESTED; sourceTree = "<group>"; };
+		D5CB7EA7306324FE0036DA22 /* WHEEL */ = {isa = PBXFileReference; lastKnownFileType = text; path = WHEEL; sourceTree = "<group>"; };
+		D5CB7EA9306324FE0036DA22 /* INSTALLER */ = {isa = PBXFileReference; lastKnownFileType = text; path = INSTALLER; sourceTree = "<group>"; };
+		D5CB7EAA306324FE0036DA22 /* LICENSE.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE.txt; sourceTree = "<group>"; };
+		D5CB7EAB306324FE0036DA22 /* METADATA */ = {isa = PBXFileReference; lastKnownFileType = text; path = METADATA; sourceTree = "<group>"; };
+		D5CB7EAC306324FE0036DA22 /* RECORD */ = {isa = PBXFileReference; lastKnownFileType = text; path = RECORD; sourceTree = "<group>"; };
+		D5CB7EAD306324FE0036DA22 /* WHEEL */ = {isa = PBXFileReference; lastKnownFileType = text; path = WHEEL; sourceTree = "<group>"; };
+		D5CB7EAF306324FE0036DA22 /* _speedups.cpython-314-darwin.so */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.bundle"; path = "_speedups.cpython-314-darwin.so"; sourceTree = "<group>"; };
+		D5CB7EB1306324FE0036DA22 /* LICENSE.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE.txt; sourceTree = "<group>"; };
+		D5CB7EB3306324FE0036DA22 /* INSTALLER */ = {isa = PBXFileReference; lastKnownFileType = text; path = INSTALLER; sourceTree = "<group>"; };
+		D5CB7EB4306324FE0036DA22 /* METADATA */ = {isa = PBXFileReference; lastKnownFileType = text; path = METADATA; sourceTree = "<group>"; };
+		D5CB7EB5306324FE0036DA22 /* RECORD */ = {isa = PBXFileReference; lastKnownFileType = text; path = RECORD; sourceTree = "<group>"; };
+		D5CB7EB6306324FE0036DA22 /* top_level.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = top_level.txt; sourceTree = "<group>"; };
+		D5CB7EB7306324FE0036DA22 /* WHEEL */ = {isa = PBXFileReference; lastKnownFileType = text; path = WHEEL; sourceTree = "<group>"; };
+		D5CB7EB9306324FE0036DA22 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		D5CB7EBB306324FE0036DA22 /* INSTALLER */ = {isa = PBXFileReference; lastKnownFileType = text; path = INSTALLER; sourceTree = "<group>"; };
+		D5CB7EBC306324FE0036DA22 /* METADATA */ = {isa = PBXFileReference; lastKnownFileType = text; path = METADATA; sourceTree = "<group>"; };
+		D5CB7EBD306324FE0036DA22 /* RECORD */ = {isa = PBXFileReference; lastKnownFileType = text; path = RECORD; sourceTree = "<group>"; };
+		D5CB7EBE306324FE0036DA22 /* REQUESTED */ = {isa = PBXFileReference; lastKnownFileType = text; path = REQUESTED; sourceTree = "<group>"; };
+		D5CB7EBF306324FE0036DA22 /* top_level.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = top_level.txt; sourceTree = "<group>"; };
+		D5CB7EC0306324FE0036DA22 /* WHEEL */ = {isa = PBXFileReference; lastKnownFileType = text; path = WHEEL; sourceTree = "<group>"; };
+		D5CB7EC2306324FE0036DA22 /* Lorem ipsum.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Lorem ipsum.txt"; sourceTree = "<group>"; };
+		D5CB7EC7306324FE0036DA22 /* LICENSE.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE.txt; sourceTree = "<group>"; };
+		D5CB7EC9306324FE0036DA22 /* INSTALLER */ = {isa = PBXFileReference; lastKnownFileType = text; path = INSTALLER; sourceTree = "<group>"; };
+		D5CB7ECA306324FE0036DA22 /* METADATA */ = {isa = PBXFileReference; lastKnownFileType = text; path = METADATA; sourceTree = "<group>"; };
+		D5CB7ECB306324FE0036DA22 /* RECORD */ = {isa = PBXFileReference; lastKnownFileType = text; path = RECORD; sourceTree = "<group>"; };
+		D5CB7ECC306324FE0036DA22 /* WHEEL */ = {isa = PBXFileReference; lastKnownFileType = text; path = WHEEL; sourceTree = "<group>"; };
+		D5CB7ECE306324FE0036DA22 /* base_library.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = base_library.zip; sourceTree = "<group>"; };
+		D5CB7ECF306324FE0036DA22 /* libpython3.14.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libpython3.14.dylib; sourceTree = "<group>"; };
+		D5CB7ED1306324FE0036DA22 /* SpotifyDJServer */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = SpotifyDJServer; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		000000000000000000000010 /* spotifydj */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = spotifydj;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		000000000000000130000000 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			files = (
+			);
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		000000000000000000000001 = {
+			isa = PBXGroup;
+			children = (
+				000000000000000000000010 /* spotifydj */,
+				000000000000000000000020 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		000000000000000000000020 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				000000000000000000000120 /* spotifydj.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		D5CB7E95306324FE0036DA22 /* certifi */ = {
+			isa = PBXGroup;
+			children = (
+				D5CB7E93306324FE0036DA22 /* cacert.pem */,
+				D5CB7E94306324FE0036DA22 /* py.typed */,
+			);
+			path = certifi;
+			sourceTree = "<group>";
+		};
+		D5CB7E98306324FE0036DA22 /* charset_normalizer */ = {
+			isa = PBXGroup;
+			children = (
+				D5CB7E96306324FE0036DA22 /* cd.cpython-314-darwin.so */,
+				D5CB7E97306324FE0036DA22 /* md.cpython-314-darwin.so */,
+			);
+			path = charset_normalizer;
+			sourceTree = "<group>";
+		};
+		D5CB7E9A306324FE0036DA22 /* licenses */ = {
+			isa = PBXGroup;
+			children = (
+				D5CB7E99306324FE0036DA22 /* LICENSE.txt */,
+			);
+			path = licenses;
+			sourceTree = "<group>";
+		};
+		D5CB7E9F306324FE0036DA22 /* click-8.5.0.dist-info */ = {
+			isa = PBXGroup;
+			children = (
+				D5CB7E9A306324FE0036DA22 /* licenses */,
+				D5CB7E9B306324FE0036DA22 /* INSTALLER */,
+				D5CB7E9C306324FE0036DA22 /* METADATA */,
+				D5CB7E9D306324FE0036DA22 /* RECORD */,
+				D5CB7E9E306324FE0036DA22 /* WHEEL */,
+			);
+			path = "click-8.5.0.dist-info";
+			sourceTree = "<group>";
+		};
+		D5CB7EA1306324FE0036DA22 /* licenses */ = {
+			isa = PBXGroup;
+			children = (
+				D5CB7EA0306324FE0036DA22 /* LICENSE.txt */,
+			);
+			path = licenses;
+			sourceTree = "<group>";
+		};
+		D5CB7EA8306324FE0036DA22 /* flask-3.1.3.dist-info */ = {
+			isa = PBXGroup;
+			children = (
+				D5CB7EA1306324FE0036DA22 /* licenses */,
+				D5CB7EA2306324FE0036DA22 /* entry_points.txt */,
+				D5CB7EA3306324FE0036DA22 /* INSTALLER */,
+				D5CB7EA4306324FE0036DA22 /* METADATA */,
+				D5CB7EA5306324FE0036DA22 /* RECORD */,
+				D5CB7EA6306324FE0036DA22 /* REQUESTED */,
+				D5CB7EA7306324FE0036DA22 /* WHEEL */,
+			);
+			path = "flask-3.1.3.dist-info";
+			sourceTree = "<group>";
+		};
+		D5CB7EAE306324FE0036DA22 /* itsdangerous-2.2.0.dist-info */ = {
+			isa = PBXGroup;
+			children = (
+				D5CB7EA9306324FE0036DA22 /* INSTALLER */,
+				D5CB7EAA306324FE0036DA22 /* LICENSE.txt */,
+				D5CB7EAB306324FE0036DA22 /* METADATA */,
+				D5CB7EAC306324FE0036DA22 /* RECORD */,
+				D5CB7EAD306324FE0036DA22 /* WHEEL */,
+			);
+			path = "itsdangerous-2.2.0.dist-info";
+			sourceTree = "<group>";
+		};
+		D5CB7EB0306324FE0036DA22 /* markupsafe */ = {
+			isa = PBXGroup;
+			children = (
+				D5CB7EAF306324FE0036DA22 /* _speedups.cpython-314-darwin.so */,
+			);
+			path = markupsafe;
+			sourceTree = "<group>";
+		};
+		D5CB7EB2306324FE0036DA22 /* licenses */ = {
+			isa = PBXGroup;
+			children = (
+				D5CB7EB1306324FE0036DA22 /* LICENSE.txt */,
+			);
+			path = licenses;
+			sourceTree = "<group>";
+		};
+		D5CB7EB8306324FE0036DA22 /* markupsafe-3.0.3.dist-info */ = {
+			isa = PBXGroup;
+			children = (
+				D5CB7EB2306324FE0036DA22 /* licenses */,
+				D5CB7EB3306324FE0036DA22 /* INSTALLER */,
+				D5CB7EB4306324FE0036DA22 /* METADATA */,
+				D5CB7EB5306324FE0036DA22 /* RECORD */,
+				D5CB7EB6306324FE0036DA22 /* top_level.txt */,
+				D5CB7EB7306324FE0036DA22 /* WHEEL */,
+			);
+			path = "markupsafe-3.0.3.dist-info";
+			sourceTree = "<group>";
+		};
+		D5CB7EBA306324FE0036DA22 /* licenses */ = {
+			isa = PBXGroup;
+			children = (
+				D5CB7EB9306324FE0036DA22 /* LICENSE */,
+			);
+			path = licenses;
+			sourceTree = "<group>";
+		};
+		D5CB7EC1306324FE0036DA22 /* importlib_metadata-8.7.1.dist-info */ = {
+			isa = PBXGroup;
+			children = (
+				D5CB7EBA306324FE0036DA22 /* licenses */,
+				D5CB7EBB306324FE0036DA22 /* INSTALLER */,
+				D5CB7EBC306324FE0036DA22 /* METADATA */,
+				D5CB7EBD306324FE0036DA22 /* RECORD */,
+				D5CB7EBE306324FE0036DA22 /* REQUESTED */,
+				D5CB7EBF306324FE0036DA22 /* top_level.txt */,
+				D5CB7EC0306324FE0036DA22 /* WHEEL */,
+			);
+			path = "importlib_metadata-8.7.1.dist-info";
+			sourceTree = "<group>";
+		};
+		D5CB7EC3306324FE0036DA22 /* text */ = {
+			isa = PBXGroup;
+			children = (
+				D5CB7EC2306324FE0036DA22 /* Lorem ipsum.txt */,
+			);
+			path = text;
+			sourceTree = "<group>";
+		};
+		D5CB7EC4306324FE0036DA22 /* jaraco */ = {
+			isa = PBXGroup;
+			children = (
+				D5CB7EC3306324FE0036DA22 /* text */,
+			);
+			path = jaraco;
+			sourceTree = "<group>";
+		};
+		D5CB7EC5306324FE0036DA22 /* _vendor */ = {
+			isa = PBXGroup;
+			children = (
+				D5CB7EC1306324FE0036DA22 /* importlib_metadata-8.7.1.dist-info */,
+				D5CB7EC4306324FE0036DA22 /* jaraco */,
+			);
+			path = _vendor;
+			sourceTree = "<group>";
+		};
+		D5CB7EC6306324FE0036DA22 /* setuptools */ = {
+			isa = PBXGroup;
+			children = (
+				D5CB7EC5306324FE0036DA22 /* _vendor */,
+			);
+			path = setuptools;
+			sourceTree = "<group>";
+		};
+		D5CB7EC8306324FE0036DA22 /* licenses */ = {
+			isa = PBXGroup;
+			children = (
+				D5CB7EC7306324FE0036DA22 /* LICENSE.txt */,
+			);
+			path = licenses;
+			sourceTree = "<group>";
+		};
+		D5CB7ECD306324FE0036DA22 /* werkzeug-3.1.8.dist-info */ = {
+			isa = PBXGroup;
+			children = (
+				D5CB7EC8306324FE0036DA22 /* licenses */,
+				D5CB7EC9306324FE0036DA22 /* INSTALLER */,
+				D5CB7ECA306324FE0036DA22 /* METADATA */,
+				D5CB7ECB306324FE0036DA22 /* RECORD */,
+				D5CB7ECC306324FE0036DA22 /* WHEEL */,
+			);
+			path = "werkzeug-3.1.8.dist-info";
+			sourceTree = "<group>";
+		};
+		D5CB7ED0306324FE0036DA22 /* _internal */ = {
+			isa = PBXGroup;
+			children = (
+				D5CB7E95306324FE0036DA22 /* certifi */,
+				D5CB7E98306324FE0036DA22 /* charset_normalizer */,
+				D5CB7E9F306324FE0036DA22 /* click-8.5.0.dist-info */,
+				D5CB7EA8306324FE0036DA22 /* flask-3.1.3.dist-info */,
+				D5CB7EAE306324FE0036DA22 /* itsdangerous-2.2.0.dist-info */,
+				D5CB7EB0306324FE0036DA22 /* markupsafe */,
+				D5CB7EB8306324FE0036DA22 /* markupsafe-3.0.3.dist-info */,
+				D5CB7EC6306324FE0036DA22 /* setuptools */,
+				D5CB7ECD306324FE0036DA22 /* werkzeug-3.1.8.dist-info */,
+				D5CB7ECE306324FE0036DA22 /* base_library.zip */,
+				D5CB7ECF306324FE0036DA22 /* libpython3.14.dylib */,
+			);
+			path = _internal;
+			sourceTree = "<group>";
+		};
+		D5CB7ED2306324FE0036DA22 /* SpotifyDJServer 3 */ = {
+			isa = PBXGroup;
+			children = (
+				D5CB7ED0306324FE0036DA22 /* _internal */,
+				D5CB7ED1306324FE0036DA22 /* SpotifyDJServer */,
+			);
+			path = "SpotifyDJServer 3";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		000000000000000100000000 /* spotifydj */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 000000000000000110000000 /* Build configuration list for PBXNativeTarget "spotifydj" */;
+			buildPhases = (
+				000000000000000120000000 /* Sources */,
+				000000000000000130000000 /* Frameworks */,
+				000000000000000140000000 /* Resources */,
+				D58B09543062E956006E3711 /* Copy Files */,
+				D5CB7DB930631D4A0036DA22 /* Run Script */,
+			);
+			buildRules = (
+			);
+			fileSystemSynchronizedGroups = (
+				000000000000000000000010 /* spotifydj */,
+			);
+			name = spotifydj;
+			productName = MyApp;
+			productReference = 000000000000000000000120 /* spotifydj.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		000000000000000000000000 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 2630;
+				LastUpgradeCheck = 2700;
+				TargetAttributes = {
+					000000000000000100000000 = {
+						CreatedOnToolsVersion = 26.3;
+					};
+				};
+			};
+			buildConfigurationList = 000000000000000010000000 /* Build configuration list for PBXProject "spotifydj" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 000000000000000000000001;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 90;
+			productRefGroup = 000000000000000000000020 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				000000000000000100000000 /* spotifydj */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		000000000000000140000000 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			files = (
+			);
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		D5CB7DB930631D4A0036DA22 /* Run Script */ = {
+			isa = PBXShellScriptBuildPhase;
+			name = "Run Script";
+			shellPath = /bin/sh;
+			shellScript = (
+				"set -e",
+				"",
+				"echo \"Copying Spotify Player server into the app\"",
+				"",
+				"SERVER_SOURCE=\"${PROJECT_DIR}/../server/dist/SpotifyDJServer\"",
+				"if [ ! -x \"$SERVER_SOURCE/SpotifyDJServer\" ]; then \"${PROJECT_DIR}/../server/build_mac.sh\"; fi",
+				"SERVER_DEST=\"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/SpotifyDJServer\"",
+				"",
+				"echo \"SOURCE:\"",
+				"echo \"$SERVER_SOURCE\"",
+				"",
+				"echo \"DEST:\"",
+				"echo \"$SERVER_DEST\"",
+				"",
+				"echo \"RESOURCE FOLDER:\"",
+				"echo \"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}\"",
+				"",
+				"echo \"Checking destination...\"",
+				"",
+				"ls -ld \"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}\"",
+				"",
+				"echo \"Copying server...\"",
+				"",
+				"ditto \"$SERVER_SOURCE\" \"$SERVER_DEST\"",
+				"",
+				"echo \"Setting executable permission...\"",
+				"",
+				"chmod +x \"$SERVER_DEST/SpotifyDJServer\"",
+				"",
+				"echo \"================================\"",
+				"echo \"✅ SpotifyDJServer copied successfully\"",
+				"echo \"================================\"",
+				"",
+			);
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		000000000000000120000000 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			files = (
+			);
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		000000000000000011000000 /* Debug configuration for PBXProject "spotifydj" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DRIVERKIT_DEPLOYMENT_TARGET = 27.0;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 27.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 26.6.2;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PROJECT_UNIQUE_VALUE = S8YD08G7;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TVOS_DEPLOYMENT_TARGET = 27.0;
+				WATCHOS_DEPLOYMENT_TARGET = 27.0;
+				XROS_DEPLOYMENT_TARGET = 27.0;
+			};
+			name = Debug;
+		};
+		000000000000000012000000 /* Release configuration for PBXProject "spotifydj" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DRIVERKIT_DEPLOYMENT_TARGET = 27.0;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 27.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 26.6.2;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PROJECT_UNIQUE_VALUE = S8YD08G7;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				TVOS_DEPLOYMENT_TARGET = 27.0;
+				WATCHOS_DEPLOYMENT_TARGET = 27.0;
+				XROS_DEPLOYMENT_TARGET = 27.0;
+			};
+			name = Release;
+		};
+		000000000000000111000000 /* Debug configuration for PBXNativeTarget "spotifydj" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_APP_SANDBOX = NO;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "devplaceholder.$(PROJECT_UNIQUE_VALUE:identifier).$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
+				SDKROOT = auto;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2,7";
+			};
+			name = Debug;
+		};
+		000000000000000112000000 /* Release configuration for PBXNativeTarget "spotifydj" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_APP_SANDBOX = NO;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "devplaceholder.$(PROJECT_UNIQUE_VALUE:identifier).$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
+				SDKROOT = auto;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2,7";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		000000000000000010000000 /* Build configuration list for PBXProject "spotifydj" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				000000000000000011000000 /* Debug configuration for PBXProject "spotifydj" */,
+				000000000000000012000000 /* Release configuration for PBXProject "spotifydj" */,
+			);
+			defaultConfigurationName = Release;
+		};
+		000000000000000110000000 /* Build configuration list for PBXNativeTarget "spotifydj" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				000000000000000111000000 /* Debug configuration for PBXNativeTarget "spotifydj" */,
+				000000000000000112000000 /* Release configuration for PBXNativeTarget "spotifydj" */,
+			);
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 000000000000000000000000 /* Project object */;
+}
