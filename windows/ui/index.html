@@ -47,6 +47,14 @@
   .vignette { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,.35) 100%); }
 
   /* ---------- раскладка ---------- */
+  /* Макет нарисован под 640×295. При масштабе Windows 125%/150% WebView
+     увеличивает всё содержимое, и оно перестаёт влезать в окно — поэтому
+     «сцена» всегда подгоняется под реальный размер окна (см. fitStage()). */
+  #stage {
+    position: relative; z-index: 1;
+    width: 640px; height: 295px;
+    transform-origin: 0 0;
+  }
   .app {
     position: relative; z-index: 1; height: 100%;
     display: flex; flex-direction: column;
@@ -234,6 +242,7 @@
     <div class="vignette"></div>
   </div>
 
+  <div id="stage">
   <div class="app">
     <div class="header stagger pywebview-drag-region">
       <div>
@@ -244,7 +253,7 @@
         </div>
       </div>
       <div class="spacer"></div>
-      <div class="keys"><span class="key">⇧</span><span class="key">Space</span></div>
+      <div class="keys"><span class="key">Shift</span><span class="key">Space</span></div>
     </div>
 
     <form class="search stagger s1" id="form" autocomplete="off">
@@ -300,10 +309,19 @@
       <div class="msg" id="msg"></div>
     </div>
   </div>
+  </div>
 
 <script>
 const $ = (id) => document.getElementById(id);
 const body = document.body;
+
+// Подгоняем макет 640×295 под фактический размер окна (масштаб Windows 100–200%).
+function fitStage() {
+  const k = Math.min(window.innerWidth / 640, window.innerHeight / 295);
+  $("stage").style.transform = `scale(${k})`;
+}
+fitStage();
+window.addEventListener("resize", fitStage);
 const api = () => (window.pywebview && window.pywebview.api) || null;
 
 const state = {
