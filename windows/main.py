@@ -32,6 +32,84 @@ IS_WINDOWS = os.name == "nt"
 
 
 # ==========================================
+# WIN32: фокус окон и горячая клавиша
+# ==========================================
+
+if IS_WINDOWS:
+    from ctypes import wintypes
+
+    user32 = ctypes.windll.user32
+    kernel32 = ctypes.windll.kernel32
+
+    user32.GetForegroundWindow.restype = wintypes.HWND
+    user32.SetForegroundWindow.argtypes = [wintypes.HWND]
+    user32.BringWindowToTop.argtypes = [wintypes.HWND]
+    user32.SetFocus.argtypes = [wintypes.HWND]
+    user32.IsWindow.argtypes = [wintypes.HWND]
+    user32.IsWindowVisible.argtypes = [wintypes.HWND]
+    user32.GetWindowThreadProcessId.argtypes = [wintypes.HWND, ctypes.POINTER(wintypes.DWORD)]
+    user32.GetWindowThreadProcessId.restype = wintypes.DWORD
+    user32.AttachThreadInput.argtypes = [wintypes.DWORD, wintypes.DWORD, wintypes.BOOL]
+    user32.GetWindowTextW.argtypes = [wintypes.HWND, wintypes.LPWSTR, ctypes.c_int]
+    user32.GetClassNameW.argtypes = [wintypes.HWND, wintypes.LPWSTR, ctypes.c_int]
+    user32.RegisterHotKey.argtypes = [wintypes.HWND, ctypes.c_int, wintypes.UINT, wintypes.UINT]
+    user32.GetMessageW.argtypes = [ctypes.POINTER(wintypes.MSG), wintypes.HWND, wintypes.UINT, wintypes.UINT]
+
+    EnumWindowsProc = ctypes.WINFUNCTYPE(wintypes.BOOL, wintypes.HWND, wintypes.LPARAM)
+
+
+def find_own_window():
+    """HWND окна плеера: ищем окно нашего процесса с нашим заголовком."""
+    found = []
+    pid = os.getpid()
+
+    def callback(hwnd, _):
+        owner = wintypes.DWORD()
+        user32.GetWindowThreadProcessId(hwnd, ctypes.byref(owner))
+        if owner.value == pid:
+            title = ctypes.create_unicode_buffer(128)
+            user32.GetWindowTextW(hwnd, title, 128)
+            klass = ctypes.create_unicode_buffer(128)
+            user32.GetClassNameW(hwnd, klass, 128)
+            # окно pywebview — это форма WinForms; скрытое окно значка в трее не подходит
+            if title.value == APP_NAME and klass.value.startswith("WindowsForms"):
+                found.append(hwnd)
+                return False
+        return True
+
+    user32.EnumWindows(EnumWindowsProc(callback), 0)
+    return found[0] if found else None
+
+
+def force_foreground(hwnd):
+    """Сделать окно активным и отдать ему клавиатуру — без «нажатий» Alt.
+
+    Раньше для этого программно жали Alt, но вместе с зажатым Shift (от Shift+Пробел)
+    это превращалось в Alt+Shift и переключало язык ввода. Теперь на мгновение
+    подключаемся к очереди ввода текущего активного окна — так Windows разрешает
+    сменить активное окно честно.
+    """
+    if not hwnd or not user32.IsWindow(hwnd):
+        return
+    current = kernel32.GetCurrentThreadId()
+    foreground = user32.GetForegroundWindow()
+    fg_thread = user32.GetWindowThreadProcessId(foreground, None) if foreground else 0
+    target_thread = user32.GetWindowThreadProcessId(hwnd, None)
+
+    attached = []
+    for thread in {fg_thread, target_thread}:
+        if thread and thread != current and user32.AttachThreadInput(current, thread, True):
+            attached.append(thread)
+    try:
+        user32.BringWindowToTop(hwnd)
+        user32.SetForegroundWindow(hwnd)
+        user32.SetFocus(hwnd)
+    finally:
+        for thread in attached:
+            user32.AttachThreadInput(current, thread, False)
+
+
+# ==========================================
 # ОКНО
 # ==========================================
 
@@ -51,6 +129,8 @@ class Controller:
         self.window = None
         self.visible = False
         self.lock = threading.Lock()
+        self.hwnd = None            # HWND окна плеера
+        self.previous_hwnd = None   # окно, в котором пользователь был до Shift+Пробел
 
     def create(self):
         self.window = webview.create_window(
@@ -76,6 +156,7 @@ class Controller:
             return
         try:
             hwnd = int(self.window.native.Handle.ToInt64())
+            self.hwnd = hwnd
             DWMWA_WINDOW_CORNER_PREFERENCE = 33
             DWMWCP_ROUND = 2
             value = ctypes.c_int(DWMWCP_ROUND)
@@ -104,6 +185,11 @@ class Controller:
         with self.lock:
             if not self.window:
                 return
+            if IS_WINDOWS:
+                self.hwnd = self.hwnd or find_own_window()
+                previous = user32.GetForegroundWindow()
+                if previous and previous != self.hwnd:
+                    self.previous_hwnd = previous
             self.center()
             self.window.show()
             self.window.restore()
@@ -116,6 +202,10 @@ class Controller:
             if self.window and self.visible:
                 self.window.hide()
                 self.visible = False
+                # вернуть клавиатуру туда, где пользователь печатал до Shift+Пробел
+                if IS_WINDOWS and self.previous_hwnd and user32.IsWindowVisible(self.previous_hwnd):
+                    force_foreground(self.previous_hwnd)
+                self.previous_hwnd = None
 
     def toggle(self):
         if self.visible:
@@ -128,12 +218,8 @@ class Controller:
         if not IS_WINDOWS:
             return
         try:
-            hwnd = int(self.window.native.Handle.ToInt64())
-            user32 = ctypes.windll.user32
-            # трюк с Alt: Windows разрешает SetForegroundWindow после «нажатия» клавиши
-            user32.keybd_event(0x12, 0, 0, 0)
-            user32.keybd_event(0x12, 0, 2, 0)
-            user32.SetForegroundWindow(hwnd)
+            self.hwnd = self.hwnd or find_own_window()
+            force_foreground(self.hwnd)
         except Exception as error:
             print("FOCUS:", error)
 
@@ -146,13 +232,34 @@ controller = Controller()
 # ==========================================
 
 def setup_hotkey():
-    try:
-        import keyboard  # работает на Windows без прав администратора
+    """Системная горячая клавиша Windows (RegisterHotKey).
 
-        keyboard.add_hotkey("shift+space", controller.toggle, suppress=True)
+    Раньше использовалась библиотека keyboard: она перехватывает ВСЕ нажатия
+    в системе и из-за этого иногда «залипали» Shift/фокус. RegisterHotKey
+    получает только само сочетание Shift+Пробел и больше ничего не трогает.
+    """
+    if not IS_WINDOWS:
+        return
+
+    MOD_SHIFT = 0x0004
+    MOD_NOREPEAT = 0x4000
+    VK_SPACE = 0x20
+    WM_HOTKEY = 0x0312
+
+    def loop():
+        if not user32.RegisterHotKey(None, 1, MOD_SHIFT | MOD_NOREPEAT, VK_SPACE):
+            print("HOTKEY ERROR: Shift+Space is already used by another program")
+            return
         print("HOTKEY: Shift+Space")
-    except Exception as error:
-        print("HOTKEY ERROR:", error)
+        msg = wintypes.MSG()
+        while user32.GetMessageW(ctypes.byref(msg), None, 0, 0) > 0:
+            if msg.message == WM_HOTKEY:
+                try:
+                    controller.toggle()
+                except Exception as error:
+                    print("HOTKEY ACTION ERROR:", error)
+
+    threading.Thread(target=loop, daemon=True, name="hotkey").start()
 
 
 # ==========================================
