@@ -306,6 +306,8 @@ const state = {
   playing: false, liked: false,
   progress: 0, duration: 0, stamp: performance.now(),
   visible: true, loading: false,
+  // что мы только что попросили у Spotify; пока он не подтвердит — его старые ответы игнорируем
+  expect: null,
 };
 
 // ---------- сеть ----------
@@ -404,9 +406,30 @@ function updatePlayButton() {
 }
 
 // ---------- действия ----------
+// Spotify применяет команды с задержкой в 1–3 секунды и всё это время отдаёт старое
+// состояние. Без этой проверки после паузы на пару секунд снова мелькало «NOW PLAYING».
+function expectChange(what, ms = 5000) {
+  state.expect = { ...what, until: performance.now() + ms };
+}
+
+function isStale(json) {
+  const e = state.expect;
+  if (!e) return false;
+  if (performance.now() > e.until) { state.expect = null; return false; }  // ждали достаточно
+  const t = json.track || {};
+  const stale =
+    (e.playing !== undefined && !!json.playing !== e.playing) ||
+    (e.trackFrom !== undefined && t.id === e.trackFrom) ||
+    (e.trackTo !== undefined && t.id !== e.trackTo) ||
+    (e.seekTo !== undefined && Math.abs((json.progress_ms || 0) - e.seekTo) > 4000);
+  if (!stale) state.expect = null;  // Spotify подтвердил — дальше верим ему
+  return stale;
+}
+
 async function refreshState() {
   const [json, err] = await request("/native-state");
   if (err || !json) return;
+  if (isStale(json)) return;          // устаревший ответ — не перерисовываем
   const t = json.track;
   if (t) {
     setTrack(t.name || "", t.artist || "", t.image_url || "");
@@ -431,6 +454,7 @@ async function play() {
   state.id = json.id || "";
   setLiked(false);
   setPlaying(true);
+  expectChange(json.kind === "artist" ? { playing: true } : { trackTo: state.id, playing: true });
   state.progress = 0; state.duration = json.duration_ms || 0; state.stamp = performance.now();
   $("q").value = ""; updatePlayButton();
   showMessage("Playing");
@@ -439,9 +463,11 @@ async function play() {
 }
 
 async function control(action, extra = {}) {
+  if (action === "next" || action === "previous") expectChange({ trackFrom: state.id });
+  if (action === "seek") expectChange({ seekTo: extra.position_ms }, 3000);
   const [, err] = await request("/native-control", "POST", { action, ...extra });
-  if (err) showMessage(err, true);
-  setTimeout(refreshState, 400);
+  if (err) { showMessage(err, true); state.expect = null; }
+  setTimeout(refreshState, 700);
 }
 
 async function toggleLike() {
@@ -490,6 +516,7 @@ $("toggle").addEventListener("click", () => {
   const next = !state.playing;
   state.progress = livePosition(); state.stamp = performance.now();
   setPlaying(next);
+  expectChange({ playing: next });
   control(next ? "play" : "pause");
 });
 $("like").addEventListener("click", toggleLike);
