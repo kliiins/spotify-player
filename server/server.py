@@ -77,7 +77,7 @@ SCOPES = " ".join([
 
 HTTP_TIMEOUT = 10          # секунд на любой запрос к Spotify
 TOKEN_MARGIN = 60          # обновляем токен за минуту до истечения
-DEVICE_WAIT_SECONDS = 8    # сколько ждать, пока запущенный Spotify появится как устройство
+DEVICE_WAIT_SECONDS = 15   # сколько ждать, пока только что запущенный Spotify появится как устройство
 
 NOT_LOGGED_IN = "Log in to Spotify first: choose “Log in to Spotify…” in the app menu."
 
@@ -546,7 +546,24 @@ def player_action(action, position_ms=None):
         raise SpotifyError("Unknown command")
 
     method, endpoint, params = commands[action]
-    spotify_ok(spotify_api(method, endpoint, params=params))
+    response = spotify_api(method, endpoint, params=params)
+
+    # Нет активного устройства (Spotify закрыт или давно не играл) — открываем Spotify,
+    # ждём, пока он появится, и переносим воспроизведение на него.
+    if response.status_code == 404 and action in ("play", "next", "previous"):
+        device = pick_device()   # сам запускает Spotify, если он закрыт
+        print(f"NO ACTIVE DEVICE — RESUMING ON {device.get('name')}")
+        spotify_ok(spotify_api(
+            "PUT", "/me/player",
+            json={"device_ids": [device["id"]], "play": True},
+        ))
+        if action in ("next", "previous"):
+            time.sleep(0.5)
+            response = spotify_api(method, endpoint, params={"device_id": device["id"]})
+        else:
+            return {"success": True, "action": action, "launched": True}
+
+    spotify_ok(response)
     return {"success": True, "action": action}
 
 

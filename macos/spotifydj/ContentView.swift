@@ -34,6 +34,11 @@ struct ContentView: View {
     @State private var trackID = ""
     @State private var isLiked = false
     @State private var likeBounce = 0
+
+    /// Что мы только что попросили у Spotify. Он применяет команды с задержкой 1–3 с
+    /// и всё это время отдаёт старое состояние — такие ответы игнорируем,
+    /// иначе после паузы на пару секунд снова мелькало «NOW PLAYING».
+    @State private var expected: Expectation?
     @State private var stateDate = Date()
 
     @State private var isWindowVisible = false
@@ -569,7 +574,8 @@ struct ContentView: View {
 
         var request = URLRequest(url: url)
         request.httpMethod = method
-        request.timeoutInterval = 20
+        // запас времени: если Spotify был закрыт, сервер ждёт, пока он запустится
+        request.timeoutInterval = 35
 
         if let body {
             request.setValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -622,6 +628,8 @@ struct ContentView: View {
             message = ""
         }
 
+        ensureSpotifyRunning()
+
         sendRequest("/native-play", method: "POST", body: ["prompt": song]) { json, error in
             withAnimation(Theme.snappy) {
                 isLoading = false
@@ -645,6 +653,12 @@ struct ContentView: View {
                 isLiked = false
             }
 
+            let isArtist = (json?["kind"] as? String) == "artist"
+            expected = Expectation(
+                playing: true,
+                trackTo: isArtist || trackID.isEmpty ? nil : trackID
+            )
+
             // узнаём, лайкнут ли трек, и точное «сейчас играет» (для исполнителя)
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
                 refreshState()
@@ -664,6 +678,10 @@ struct ContentView: View {
         sendRequest("/native-state") { json, error in
             guard error == nil, let json else {
                 return
+            }
+
+            if isStale(json) {
+                return  // Spotify ещё не применил нашу команду
             }
 
             let track = json["track"] as? [String: Any]
@@ -738,7 +756,72 @@ struct ContentView: View {
         }
     }
 
+    /// true, если ответ сервера ещё не отражает нашу последнюю команду
+    private func isStale(_ json: [String: Any]) -> Bool {
+        guard let e = expected else {
+            return false
+        }
+
+        if Date() > e.until {
+            expected = nil  // подождали достаточно — дальше верим Spotify
+            return false
+        }
+
+        let track = json["track"] as? [String: Any]
+        let id = track?["id"] as? String
+        let playing = json["playing"] as? Bool ?? false
+        let progress = json["progress_ms"] as? Int ?? 0
+
+        var stale = false
+        if let want = e.playing, playing != want { stale = true }
+        if let from = e.trackFrom, id == from { stale = true }
+        if let to = e.trackTo, id != to { stale = true }
+        if let seek = e.seekTo, abs(progress - seek) > 4000 { stale = true }
+
+        if !stale {
+            expected = nil  // подтверждено
+        }
+        return stale
+    }
+
+    /// Если Spotify закрыт — открываем его в фоне, чтобы команда было куда отправить.
+    /// Возвращает true, если Spotify пришлось запускать.
+    @discardableResult
+    private func ensureSpotifyRunning() -> Bool {
+        let bundleID = "com.spotify.client"
+
+        guard NSRunningApplication.runningApplications(withBundleIdentifier: bundleID).isEmpty,
+              let appURL = NSWorkspace.shared.urlForApplication(withBundleIdentifier: bundleID)
+        else {
+            return false
+        }
+
+        let configuration = NSWorkspace.OpenConfiguration()
+        configuration.activates = false   // не уводим фокус из плеера
+        configuration.hides = true
+        NSWorkspace.shared.openApplication(at: appURL, configuration: configuration)
+        showMessage("Opening Spotify…", error: false)
+        return true
+    }
+
     private func control(_ action: String, positionMs: Int? = nil) {
+        let launchedSpotify = (action == "play" || action == "next" || action == "previous")
+            && ensureSpotifyRunning()
+
+        switch action {
+        case _ where launchedSpotify:
+            // Spotify запускается — подтверждение придёт только через несколько секунд
+            expected = Expectation(playing: true, seconds: 20)
+        case "play", "pause":
+            expected = Expectation(playing: action == "play")
+        case "next", "previous":
+            expected = Expectation(trackFrom: trackID)
+        case "seek":
+            expected = Expectation(seekTo: positionMs, seconds: 3)
+        default:
+            break
+        }
+
         var body: [String: Any] = ["action": action]
 
         if let positionMs {
@@ -748,12 +831,13 @@ struct ContentView: View {
         sendRequest("/native-control", method: "POST", body: body) { _, error in
             if let error {
                 showMessage(error, error: true)
+                expected = nil
             } else if isError {
                 showMessage("", error: false)
             }
 
             // Spotify обновляет состояние не мгновенно
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
                 refreshState()
             }
         }
@@ -794,6 +878,31 @@ struct ContentView: View {
         }
 
         NSWorkspace.shared.open(url)
+    }
+}
+
+// MARK: - Expectation
+
+/// Ожидаемое состояние после команды пользователя (см. ContentView.expected)
+private struct Expectation {
+    var playing: Bool? = nil
+    var trackFrom: String? = nil
+    var trackTo: String? = nil
+    var seekTo: Int? = nil
+    var until: Date
+
+    init(
+        playing: Bool? = nil,
+        trackFrom: String? = nil,
+        trackTo: String? = nil,
+        seekTo: Int? = nil,
+        seconds: Double = 5
+    ) {
+        self.playing = playing
+        self.trackFrom = trackFrom
+        self.trackTo = trackTo
+        self.seekTo = seekTo
+        self.until = Date().addingTimeInterval(seconds)
     }
 }
 
