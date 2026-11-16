@@ -828,7 +828,7 @@ struct ContentView: View {
             body["position_ms"] = positionMs
         }
 
-        sendRequest("/native-control", method: "POST", body: body) { _, error in
+        sendRequest("/native-control", method: "POST", body: body) { json, error in
             if let error {
                 showMessage(error, error: true)
                 expected = nil
@@ -836,10 +836,44 @@ struct ContentView: View {
                 showMessage("", error: false)
             }
 
-            // Spotify обновляет состояние не мгновенно
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
-                refreshState()
+            // «Следующий»: сервер заранее знает трек из очереди — показываем его сразу
+            if error == nil, let track = json?["track"] as? [String: Any] {
+                showTrackNow(track)
             }
+
+            // Spotify обновляет состояние не мгновенно. После переключения трека
+            // спрашиваем часто, чтобы новый трек появился как можно быстрее.
+            let delays: [Double] = (action == "next" || action == "previous")
+                ? [0.3, 0.6, 1.0, 1.5, 2.2, 3.0]
+                : [0.7]
+
+            for delay in delays {
+                DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
+                    refreshState()
+                }
+            }
+        }
+    }
+
+    /// Мгновенно показать трек (не дожидаясь подтверждения от Spotify)
+    private func showTrackNow(_ track: [String: Any]) {
+        let id = track["id"] as? String ?? ""
+
+        withAnimation(Theme.spring) {
+            currentSong = track["name"] as? String ?? currentSong
+            currentArtist = track["artist"] as? String ?? ""
+            albumImageURL = track["image_url"] as? String ?? albumImageURL
+            durationMs = track["duration_ms"] as? Int ?? durationMs
+            progressMs = 0
+            stateDate = Date()
+            isPlaying = true
+            trackID = id
+            isLiked = track["liked"] as? Bool ?? false
+        }
+
+        if !id.isEmpty {
+            // пока Spotify не подтвердит этот трек — его старые ответы игнорируем
+            expected = Expectation(trackTo: id)
         }
     }
 

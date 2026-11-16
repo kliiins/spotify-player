@@ -546,6 +546,11 @@ def player_action(action, position_ms=None):
         raise SpotifyError("Unknown command")
 
     method, endpoint, params = commands[action]
+
+    # Для «следующего» заранее берём трек из очереди: приложение покажет его сразу,
+    # не дожидаясь, пока Spotify (через 1–3 с) отдаст новое «сейчас играет».
+    upcoming = peek_next_track() if action == "next" else None
+
     response = spotify_api(method, endpoint, params=params)
 
     # Нет активного устройства (Spotify закрыт или давно не играл) — открываем Spotify,
@@ -564,7 +569,27 @@ def player_action(action, position_ms=None):
             return {"success": True, "action": action, "launched": True}
 
     spotify_ok(response)
-    return {"success": True, "action": action}
+    result = {"success": True, "action": action}
+    if upcoming:
+        result["track"] = upcoming
+    return result
+
+
+def peek_next_track():
+    """Первый трек из очереди Spotify (то, что заиграет после «следующего»)."""
+    try:
+        response = spotify_api("GET", "/me/player/queue")
+        if response.status_code != 200:
+            return None
+        queue = response.json().get("queue") or []
+        item = queue[0] if queue else None
+        if not item or item.get("type") != "track":
+            return None
+        info = track_info(item)
+        info["liked"] = is_liked(info["id"]) if info.get("id") else False
+        return info
+    except (SpotifyError, ValueError):
+        return None
 
 
 def json_result(func, *args):

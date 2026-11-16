@@ -465,9 +465,24 @@ async function play() {
 async function control(action, extra = {}) {
   if (action === "next" || action === "previous") expectChange({ trackFrom: state.id });
   if (action === "seek") expectChange({ seekTo: extra.position_ms }, 3000);
-  const [, err] = await request("/native-control", "POST", { action, ...extra });
+  const [json, err] = await request("/native-control", "POST", { action, ...extra });
   if (err) { showMessage(err, true); state.expect = null; }
-  setTimeout(refreshState, 700);
+
+  // «Следующий»: сервер заранее знает трек из очереди — показываем его сразу
+  const t = !err && json && json.track;
+  if (t) {
+    setTrack(t.name || "", t.artist || "", t.image_url || "");
+    state.id = t.id || "";
+    setLiked(!!t.liked);
+    setPlaying(true);
+    state.progress = 0; state.duration = t.duration_ms || 0; state.stamp = performance.now();
+    if (state.id) expectChange({ trackTo: state.id });
+    tick();
+  }
+
+  // после переключения трека спрашиваем Spotify часто, чтобы новый трек появился быстрее
+  const delays = (action === "next" || action === "previous") ? [300, 600, 1000, 1500, 2200, 3000] : [700];
+  delays.forEach((ms) => setTimeout(refreshState, ms));
 }
 
 async function toggleLike() {
