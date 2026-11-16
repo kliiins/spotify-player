@@ -71,7 +71,7 @@ class Controller:
         return self.window
 
     def _style_window(self):
-        """Windows 11: скруглённые углы и тень, как на Mac."""
+        """Windows 11: rounded corners and no light system border."""
         if not IS_WINDOWS:
             return
         try:
@@ -81,6 +81,12 @@ class Controller:
             value = ctypes.c_int(DWMWCP_ROUND)
             ctypes.windll.dwmapi.DwmSetWindowAttribute(
                 hwnd, DWMWA_WINDOW_CORNER_PREFERENCE, ctypes.byref(value), ctypes.sizeof(value)
+            )
+            # без светлой системной рамки вокруг окна
+            DWMWA_BORDER_COLOR = 34
+            DWMWA_COLOR_NONE = ctypes.c_uint(0xFFFFFFFE)
+            ctypes.windll.dwmapi.DwmSetWindowAttribute(
+                hwnd, DWMWA_BORDER_COLOR, ctypes.byref(DWMWA_COLOR_NONE), ctypes.sizeof(DWMWA_COLOR_NONE)
             )
         except Exception as error:  # на Windows 10 просто без скругления
             print("WINDOW STYLE:", error)
